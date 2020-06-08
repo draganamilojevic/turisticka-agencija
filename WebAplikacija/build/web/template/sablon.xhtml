@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>FPIS aplikacija</title>
+        <h:outputStylesheet library="css" name="Styles.css"></h:outputStylesheet>
+    </h:head>
+    <h:body>
+        <div class="header">
+            <h:form id="meni_form">
+                <p:menubar>
+                    <p:menuitem value="Početna" url="/WebAplikacija/faces/index.xhtml" icon="fa fa-home" ></p:menuitem>
+                    <p:submenu label="Zahtev korisnika">
+                        <p:menuitem value="Unos zahteva korisnika" url="/faces/zahtevKorisnika/unos_zahteva_korisnika.xhtml" icon="fa fa-plus"></p:menuitem>
+                        <p:menuitem value="Izmena zahteva korisnika" url="/faces/zahtevKorisnika/izmena_zahteva_korisnika.xhtml" icon="fa fa-plus"></p:menuitem>
+                    </p:submenu>
+                    <p:submenu label="Program putovanja">
+                        <p:menuitem value="Unos programa putovanja" url="/faces/programPutovanja/unos_programa_putovanja.xhtml" icon="fa fa-plus"></p:menuitem>
+                        <p:menuitem value="Izmena programa putovanja" url="/faces/programPutovanja/izmena_programa_putovanja.xhtml" icon="fa fa-plus"></p:menuitem>
+                        <p:menuitem value="Prikaz programa putovanja" url="/faces/programPutovanja/prikaz_programa_putovanja.xhtml" icon="fa fa-plus"></p:menuitem>
+                    </p:submenu>
+                </p:menubar>
+            </h:form>
+            <ui:insert name="header">
+                <h1>Default header</h1>
+            </ui:insert>
+        </div>
+        
+        <div class="sadrzaj">
+            <ui:insert name="sadrzaj"></ui:insert>
+         
+        </div>
+        
+        <div class="footer">
+            <ui:insert name="footer"></ui:insert>
+        </div>
+        
+    </h:body>
+</html>
+

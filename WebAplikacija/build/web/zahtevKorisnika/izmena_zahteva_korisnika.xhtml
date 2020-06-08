@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template/sablon.xhtml">
+        <ui:define name="header">
+            <h1 align="center">Izmena zahteva korisnika</h1>
+        </ui:define>
+
+        <ui:define name="sadrzaj">
+            <h:form id="izmena_zahteva_form">
+                <p:growl id="poruka" sticky="true" showDetail="true"></p:growl>
+
+
+                <div class="row">
+                    <p:dataTable id="table-body" var="p" value="#{izmenaZahtevaMB.listaZahteva}" selectionMode="single" selection="#{izmenaZahtevaMB.zahtev}" rowKey="#{p.sifrazahteva}" scrollable="true" scrollHeight="170"  >
+
+                        <f:facet name="header">
+                            <h:outputText value="Zahtevi korisnika"></h:outputText>
+                        </f:facet>
+
+                        <p:column filterBy="#{p.sifrazahteva}" filterMatchMode="contains" headerText="Sifra zahteva">
+                            <h:outputText value="#{p.sifrazahteva}" />
+
+                        </p:column>
+
+                        <p:column filterBy="#{p.vremeboravka}" filterMatchMode="contains" headerText="Vreme boravka">
+                            <h:outputText value="#{p.vremeboravka}" />
+                        </p:column>
+
+                        <p:column filterBy="#{p.idtipaprevoza.nazivtipaprevoza}" filterMatchMode="contains" headerText="Prevoz">
+                            <h:outputText value="#{p.idtipaprevoza.nazivtipaprevoza}" />
+                        </p:column>
+
+                        <p:column filterBy="#{p.idtipasmestaja.nazivtipasmestaja}" filterMatchMode="contains" headerText="Smestaj">
+                            <h:outputText value="#{p.idtipasmestaja.nazivtipasmestaja}" />
+                        </p:column>
+
+                        <p:column filterBy="#{p.idkorisnika.imeprezime}" filterMatchMode="contains" headerText="Korisnik">
+                            <h:outputText value="#{p.idkorisnika.imeprezime}" />
+                        </p:column>
+
+                        <p:column filterBy="#{p.idkorisnika.jmbg}" filterMatchMode="contains" headerText="Jmbg">
+                            <h:outputText value="#{p.idkorisnika.jmbg}" />
+                        </p:column>
+
+                        <p:column filterBy="#{p.idkorisnika.brpasosa}" filterMatchMode="contains" headerText="Broj pasosa korisnika">
+                            <h:outputText value="#{p.idkorisnika.brpasosa}" />
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:panelGrid columns="2" layout="grid">
+
+                                <p:commandButton id="izaberi_btn" update=":izmena_zahteva_form" value="Izaberi" action="#{izmenaZahtevaMB.postaviZahtev()}" />
+                                <p:commandButton id="btn-delete" update=":izmena_zahteva_form" value="Obrisi zahtev" action="#{izmenaZahtevaMB.obrisiZahtev()}"/>
+
+                            </p:panelGrid>
+                        </f:facet>
+
+
+
+
+                    </p:dataTable>
+                </div>
+
+
+                <p:panel id="panel" style="margin-bottom:20px">
+
+                    <p:panelGrid columns="2" layout="grid">
+
+                        <f:facet name="header">
+                            <h:outputText value="Podaci o zahtevu korisnika"></h:outputText>
+                        </f:facet>
+
+
+
+                        <p:outputLabel for="sifraZahteva">Sifra zahteva:</p:outputLabel>
+                        <p:inputText id="sifraZahteva" value="#{izmenaZahtevaMB.zahtev.sifrazahteva}" disabled="true" style="width:80%"></p:inputText>
+
+                        <h:outputLabel for="vreme_boravka" value="Vreme boravka" />
+                        <p:inputText id="vreme_boravka" value="#{izmenaZahtevaMB.vremeBoravka}" style="width:80%"/>
+                        
+
+
+                        <p:outputLabel for="tip_prevoza">Tip prevoza:</p:outputLabel>
+                        <p:selectOneMenu id="tip_prevoza" value="#{izmenaZahtevaMB.IDTipaPrevoza}" style="width:80%">
+
+                            <f:selectItem itemLabel="---" itemValue="0"></f:selectItem>
+                            <f:selectItems value="#{izmenaZahtevaMB.tipoviPrevozaMapa}"></f:selectItems>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="destinacija">Destinacija:</p:outputLabel>
+                        <p:selectOneMenu id="destinacija" value="#{izmenaZahtevaMB.IDDestinacije}" style="width:80%" >
+
+                            <f:selectItem itemLabel="---" itemValue="0"></f:selectItem>
+                            <f:selectItems value="#{izmenaZahtevaMB.destinacijeMapa}"></f:selectItems>
+                        </p:selectOneMenu>
+
+
+
+                        <p:outputLabel for="tip_smestaja">Tip smestaja:</p:outputLabel>
+                        <p:selectOneMenu id="tip_smestaja" value="#{izmenaZahtevaMB.IDTipaSmestaja}" style="width:80%">
+
+                            <f:selectItem itemLabel="---" itemValue="0"></f:selectItem>
+                            <f:selectItems value="#{izmenaZahtevaMB.tipoviSmestajaMapa}"></f:selectItems>
+                        </p:selectOneMenu>
+
+
+
+                    </p:panelGrid>
+
+
+                    <p:panelGrid columns="4" layout="grid">
+
+                        <f:facet name="header">
+                            <h:outputText value="Podaci o korisniku"></h:outputText>
+                        </f:facet>
+
+                        <p:outputLabel for=""></p:outputLabel>
+
+                        <p:outputLabel for="jmbg">JMBG:</p:outputLabel>
+
+                        <p:outputLabel for="ime_prezime">Ime prezime:</p:outputLabel>
+
+                        <p:outputLabel for="broj_pasosa">Broj pasosa:</p:outputLabel>
+
+
+                        <p:commandButton id="pretraga_korisnika" update=":izmena_zahteva_form:pretragaDetail" value="Pronadji korisnika" oncomplete="PF('zahtevDialog').show()"/>
+
+                        <p:inputText id="jmbg" value="#{izmenaZahtevaMB.korisnikPrikaz.jmbg}" disabled="true" style="width:90%"></p:inputText>
+
+                        <p:inputText id="ime_prezime" value="#{izmenaZahtevaMB.korisnikPrikaz.imeprezime}" disabled="true" style="width:100%"></p:inputText>
+
+                        <p:inputText id="broj_pasosa" value="#{izmenaZahtevaMB.korisnikPrikaz.brpasosa}" disabled="true" style="width:80%"></p:inputText>
+
+                        <p:dialog widgetVar="zahtevDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                            <p:outputPanel id="pretragaDetail" style="text-align:center;">
+                                <p:dataTable id="korisnik-select" var="k" value="#{izmenaZahtevaMB.korisniciPrikaz}" selectionMode="single" selection="#{izmenaZahtevaMB.korisnikPrikaz}" rowKey="#{k.idkorisnika}" editable = "false">
+                                    <f:facet name="header">
+                                        Pretraga korisnika
+                                    </f:facet>
+                                    <p:column filterBy="#{k.idkorisnika}" filterMatchMode="contains" headerText="ID korisnika">
+                                        <h:outputText value="#{k.idkorisnika}" />
+                                    </p:column>
+                                    <p:column filterBy="#{k.jmbg}" filterMatchMode="contains" headerText="JMBG">
+                                        <h:outputText value="#{k.jmbg}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{k.imeprezime}" filterMatchMode="contains" headerText="Ime prezime">
+                                        <h:outputText value="#{k.imeprezime}" />
+                                    </p:column>
+                                    <p:column filterBy="#{k.brpasosa}" filterMatchMode="contains" headerText="Broj pasosa">
+                                        <h:outputText value="#{k.brpasosa}" />
+                                    </p:column>
+                                    <p:column filterBy="#{k.brtelefona}" filterMatchMode="contains" headerText="Broj telefona">
+                                        <h:outputText value="#{k.brtelefona}" />
+                                    </p:column>
+
+
+                                    <f:facet name="footer">
+                                        <p:commandButton id="izaberi_korisnika" update=":izmena_zahteva_form" value="Izaberi"  style="margin-top: 30px;" oncomplete="PF('izmena_zahteva_form').show()" ></p:commandButton>
+
+                                    </f:facet>
+
+                                </p:dataTable>
+
+                            </p:outputPanel>
+
+                        </p:dialog>
+
+
+                    </p:panelGrid>
+
+                    <f:facet name="footer">
+                        
+                        
+
+                            <h:commandButton id="odustani_btn"   value="Odustani" action="#{izmenaZahtevaMB.resetuj()}"/>
+                            <h:commandButton id="potvrdi_izmenu_zahteva" style="float: right" value="Izmeni zahtev" action="#{izmenaZahtevaMB.izmeniZahtev()}" />
+
+                        
+                        
+                    </f:facet>
+
+                </p:panel>
+
+
+            </h:form>
+        </ui:define>
+
+
+
+    </ui:composition>
+</html>
+

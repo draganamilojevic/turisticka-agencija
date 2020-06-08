@@ -1,0 +1,42 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Nov 2, 2019, 3:21:02 PM
+    Author     : gaga__m
+*/
+
+body{
+
+    background-image:url("images/slika4.jpg");
+    
+    
+}
+
+.sadrzaj {
+    margin: auto;
+    margin-top: 10px;
+    width: 60%;
+
+
+}
+
+
+.table-row {
+    cursor: pointer;
+}
+
+
+
+.ui-widget .ui-widget {
+    font-size: 1em;
+}
+
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+    -moz-border-radius-bottomright: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+    -khtml-border-bottom-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}

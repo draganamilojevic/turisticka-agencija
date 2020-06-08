@@ -1,0 +1,212 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/template/sablon.xhtml">
+
+        <ui:define name="header">
+            <h1 align="center">Prikaz programa putovanja</h1>
+        </ui:define>
+
+
+
+        <ui:define name="sadrzaj">
+
+            <h:form id="prikaz_programa_form">
+                <p:growl id="poruka" sticky="true" showDetail="true"></p:growl>
+
+                <div class="row">
+                    <p:dataTable id="table-body" var="p" value="#{prikazProgramaMB.listaPrograma}" selectionMode="single" selection="#{prikazProgramaMB.odabranProgram}" rowKey="#{p.sifraprograma}" scrollable="true" scrollHeight="150">
+
+                        <f:facet name="header">
+                            <h:outputText value="Programi putovanja"></h:outputText>
+                        </f:facet>
+
+                        <p:column filterBy="#{p.sifraprograma}" filterMatchMode="contains" headerText="Sifra programa">
+                            <h:outputText value="#{p.sifraprograma}" />
+
+                        </p:column>
+
+                        <p:column filterBy="#{p.ukljucenoucenu}" filterMatchMode="contains" headerText="Ukljuceno u cenu">
+                            <h:outputText value="#{p.ukljucenoucenu}" />
+                        </p:column>
+
+                        <p:column filterBy="#{p.nijeukljucenoucenu}" filterMatchMode="contains" headerText="Nije ukljuceno u cenu">
+                            <h:outputText value="#{p.nijeukljucenoucenu}" />
+                        </p:column>
+
+                        <p:column filterBy="#{p.iznos}" filterMatchMode="contains" headerText="Iznos">
+                            <h:outputText value="#{p.iznos}" />
+                        </p:column>
+
+                        <p:column filterBy="#{p.idpotvrde.idpotvrde}" filterMatchMode="contains" headerText="ID potvrde rezervacije">
+                            <h:outputText value="#{p.idpotvrde.idpotvrde}" />
+                        </p:column>
+
+                        <p:column filterBy="#{p.idpotvrde.imeRadnika}" filterMatchMode="contains" headerText="Radnik">
+                            <h:outputText value="#{p.idpotvrde.imeRadnika}" />
+                        </p:column>
+
+
+
+                        <f:facet name="footer">
+                            <p:panelGrid columns="2" layout="grid">
+
+                                <p:commandButton id="izaberi_btn" update=":prikaz_programa_form" value="Izaberi" action="#{prikazProgramaMB.postaviProgram()}"/>
+                                
+
+                            </p:panelGrid>
+                        </f:facet>
+
+
+
+
+                    </p:dataTable>
+                </div>
+
+                <p:panel id="panel" style="margin-bottom:20px">
+                    <p:panelGrid columns="2" layout="grid">  
+
+                        
+                        <p:outputLabel for="osnov">Na osnovu programa:</p:outputLabel>
+                        <p:selectOneMenu id="osnov" value="#{prikazProgramaMB.redniBrojPrograma}" disabled="true" style="width:80%">
+
+                            <f:selectItem itemLabel="---" itemValue="0"></f:selectItem>
+                            <f:selectItems value="#{prikazProgramaMB.programiMapa}"></f:selectItems>
+                        </p:selectOneMenu>
+
+
+
+
+                    </p:panelGrid>
+
+                    
+
+                    <p:panelGrid columns="3" layout="grid">
+
+                        <f:facet name="header">
+                            <h:outputText value="Podaci o potvrdi rezervacije"></h:outputText>
+                        </f:facet>
+
+                        <p:outputLabel for=""></p:outputLabel>
+
+                        <p:outputLabel for="idpotvrde">ID potvrde:</p:outputLabel>
+
+                        <p:outputLabel for="opis">Opis:</p:outputLabel>
+
+
+                        <p:commandButton id="pretraga_potvrda" update=":prikaz_programa_form:pretragaDetail1" value="Pronadji potvrdu" oncomplete="PF('zahtevDialog1').show()"/>
+
+                        <p:inputText id="idpotvrde" value="#{prikazProgramaMB.odabranaPotvrda.idpotvrde}" disabled="true"></p:inputText>
+
+                        <p:inputText id="opis" value="#{prikazProgramaMB.odabranaPotvrda.opis}" disabled="true"></p:inputText>
+
+
+
+                        <p:dialog widgetVar="zahtevDialog1" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                            <p:outputPanel id="pretragaDetail1" style="text-align:center;">
+                                <p:dataTable id="potvrda-select" var="p" value="#{prikazProgramaMB.potvrde}" selectionMode="single" selection="#{prikazProgramaMB.odabranaPotvrda}" rowKey="#{p.idpotvrde}" editable = "false">
+                                    <f:facet name="header">
+                                        Pretraga potvrde rezervacije
+                                    </f:facet>
+                                    <p:column filterBy="#{p.idpotvrde}" filterMatchMode="contains" headerText="ID potvrde">
+                                        <h:outputText value="#{p.idpotvrde}" />
+                                    </p:column>
+                                    <p:column filterBy="#{p.opis}" filterMatchMode="contains" headerText="Opis">
+                                        <h:outputText value="#{p.opis}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{p.imeRadnika}" filterMatchMode="contains" headerText="Ime prezime radnika">
+                                        <h:outputText value="#{p.imeRadnika}" />
+                                    </p:column>
+
+
+
+                                    <f:facet name="footer">
+                                        <p:commandButton id="izaberi_potvrdu" update=":prikaz_programa_form" value="Izaberi"  style="margin-top: 30px;"  ></p:commandButton>
+
+                                    </f:facet>
+
+                                </p:dataTable>
+
+                            </p:outputPanel>
+
+                        </p:dialog>
+
+                    </p:panelGrid>
+
+                    <p:panelGrid columns="2" layout="grid">
+                        <f:facet name="header">
+                            <h:outputText value="Stavke programa putovanja"></h:outputText>
+                        </f:facet>
+
+                    </p:panelGrid>
+
+
+
+                    <p:panel id="panel_stavke" style="margin-bottom:20px">
+                        <p:dataTable id="table_stavke" value="#{prikazProgramaMB.stavke}" var="s" selectionMode="single" selection="#{prikazProgramaMB.stavka1}" rowKey="#{s.iddana}" editable = "false">
+
+                            
+                            <p:column headerText="ID dana">
+                                <h:outputText value="#{s.iddana}" />
+                            </p:column>
+
+                            <p:column headerText="Datum">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{s.datum}" >
+                                        <f:convertDateTime pattern="dd.MM.yyyy" /></h:outputText>
+                                    </f:facet>
+                                    <f:facet name="input"><h:inputText value="#{s.datum}" >
+                                        <f:convertDateTime pattern="dd.MM.yyyy" /></h:inputText>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                         
+                            <p:column headerText="Mesto obilaska">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{s.idmesta}" /></f:facet>
+                                    <f:facet name="input"><h:inputText value="#{s.idmesta}" /></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Opis dana">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{s.opisdana}" /></f:facet>
+                                    <f:facet name="input"><h:inputText value="#{s.opisdana}" /></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            
+
+                        </p:dataTable>
+
+                    </p:panel>
+                    
+                    <p:panelGrid columns="2" layout="grid">
+                        <f:facet name="header">
+                            <h:outputText value="Podaci o ceni aranžmana"></h:outputText>
+                        </f:facet>
+                        
+                        <p:outputLabel for="ukljuceno" value="Ukljuceno u cenu:" />
+                        <p:inputTextarea id="ukljuceno" value="#{prikazProgramaMB.ukljucenoucenu}" style="width:80%"/> 
+
+                        <p:outputLabel for="nijeUkljuceno" value="Nije ukljuceno u cenu:" />
+                        <p:inputTextarea id="nijeUkljuceno" value="#{prikazProgramaMB.nijeukljucenoucenu}" style="width:80%"/> 
+
+                        <p:outputLabel for="iznos" value="Iznos:" />
+                        <p:inputText id="iznos" value="#{prikazProgramaMB.iznos}" style="width:80%"/> 
+
+                    </p:panelGrid>
+
+                </p:panel>
+            </h:form>
+
+
+        </ui:define>  
+    </ui:composition>
+</html>
+

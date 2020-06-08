@@ -1,0 +1,245 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/template/sablon.xhtml">
+
+        <ui:define name="header">
+            <h1 align="center">Izmena programa putovanja</h1>
+        </ui:define>
+
+
+
+        <ui:define name="sadrzaj">
+
+            <h:form id="izmena_programa_form">
+                <p:growl id="poruka" sticky="true" showDetail="true"></p:growl>
+
+                <div class="row">
+                    <p:dataTable id="table-body" var="p" value="#{izmenaProgramaPutovanjaMB.listaPrograma}" selectionMode="single" selection="#{izmenaProgramaPutovanjaMB.odabranProgram}" rowKey="#{p.sifraprograma}" scrollable="true" scrollHeight="150">
+
+                        <f:facet name="header">
+                            <h:outputText value="Programi putovanja"></h:outputText>
+                        </f:facet>
+
+                        <p:column filterBy="#{p.sifraprograma}" filterMatchMode="contains" headerText="Sifra programa">
+                            <h:outputText value="#{p.sifraprograma}" />
+
+                        </p:column>
+
+                        <p:column filterBy="#{p.ukljucenoucenu}" filterMatchMode="contains" headerText="Ukljuceno u cenu">
+                            <h:outputText value="#{p.ukljucenoucenu}" />
+                        </p:column>
+
+                        <p:column filterBy="#{p.nijeukljucenoucenu}" filterMatchMode="contains" headerText="Nije ukljuceno u cenu">
+                            <h:outputText value="#{p.nijeukljucenoucenu}" />
+                        </p:column>
+
+                        <p:column filterBy="#{p.iznos}" filterMatchMode="contains" headerText="Iznos">
+                            <h:outputText value="#{p.iznos}" />
+                        </p:column>
+
+                        <p:column filterBy="#{p.idpotvrde.idpotvrde}" filterMatchMode="contains" headerText="ID potvrde rezervacije">
+                            <h:outputText value="#{p.idpotvrde.idpotvrde}" />
+                        </p:column>
+
+                        <p:column filterBy="#{p.idpotvrde.imeRadnika}" filterMatchMode="contains" headerText="Radnik">
+                            <h:outputText value="#{p.idpotvrde.imeRadnika}" />
+                        </p:column>
+
+
+
+                        <f:facet name="footer">
+                            <p:panelGrid columns="2" layout="grid">
+
+                                <p:commandButton id="izaberi_btn" update=":izmena_programa_form" value="Izmeni" action="#{izmenaProgramaPutovanjaMB.postaviProgram()}"/>
+                                <p:commandButton id="btn-delete" update=":izmena_programa_form" value="Obrisi program" action="#{izmenaProgramaPutovanjaMB.obrisiProgram()}"/>
+
+                            </p:panelGrid>
+                        </f:facet>
+
+
+
+
+                    </p:dataTable>
+                </div>
+
+                <p:panel id="panel" style="margin-bottom:20px">
+                    <p:panelGrid columns="2" layout="grid">  
+
+                        <p:outputLabel for="sifra">Šifra programa:</p:outputLabel>
+                        <p:inputText id="sifra" value="#{izmenaProgramaPutovanjaMB.sifraPrograma}" style="width:80%" disabled="true"/> 
+                        
+                        <p:outputLabel for="osnov">Na osnovu programa:</p:outputLabel>
+                        <p:selectOneMenu id="osnov" value="#{izmenaProgramaPutovanjaMB.redniBrojPrograma}" style="width:80%">
+
+                            <f:selectItem itemLabel="---" itemValue="0"></f:selectItem>
+                            <f:selectItems value="#{izmenaProgramaPutovanjaMB.programiMapa}"></f:selectItems>
+                        </p:selectOneMenu>
+
+                    </p:panelGrid>
+
+                   
+                    <p:panelGrid columns="3" layout="grid">
+
+                        <f:facet name="header">
+                            <h:outputText value="Podaci o potvrdi rezervacije"></h:outputText>
+                        </f:facet>
+
+                        <p:outputLabel for=""></p:outputLabel>
+
+                        <p:outputLabel for="idpotvrde">ID potvrde:</p:outputLabel>
+
+                        <p:outputLabel for="opis">Opis:</p:outputLabel>
+
+
+                        <p:commandButton id="pretraga_potvrda" update=":izmena_programa_form:pretragaDetail1" value="Pronadji potvrdu" oncomplete="PF('zahtevDialog1').show()"/>
+
+                        <p:inputText id="idpotvrde" value="#{izmenaProgramaPutovanjaMB.odabranaPotvrda.idpotvrde}" disabled="true"></p:inputText>
+
+                        <p:inputText id="opis" value="#{izmenaProgramaPutovanjaMB.odabranaPotvrda.opis}" disabled="true"></p:inputText>
+
+
+
+                        <p:dialog widgetVar="zahtevDialog1" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                            <p:outputPanel id="pretragaDetail1" style="text-align:center;">
+                                <p:dataTable id="potvrda-select" var="p" value="#{izmenaProgramaPutovanjaMB.potvrde}" selectionMode="single" selection="#{izmenaProgramaPutovanjaMB.odabranaPotvrda}" rowKey="#{p.idpotvrde}" editable = "false">
+                                    <f:facet name="header">
+                                        Pretraga potvrde rezervacije
+                                    </f:facet>
+                                    <p:column filterBy="#{p.idpotvrde}" filterMatchMode="contains" headerText="ID potvrde">
+                                        <h:outputText value="#{p.idpotvrde}" />
+                                    </p:column>
+                                    <p:column filterBy="#{p.opis}" filterMatchMode="contains" headerText="Opis">
+                                        <h:outputText value="#{p.opis}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{p.imeRadnika}" filterMatchMode="contains" headerText="Ime prezime radnika">
+                                        <h:outputText value="#{p.imeRadnika}" />
+                                    </p:column>
+
+
+
+                                    <f:facet name="footer">
+                                        <p:commandButton id="izaberi_potvrdu" update=":izmena_programa_form" value="Izaberi"  style="margin-top: 30px;"  ></p:commandButton>
+
+                                    </f:facet>
+
+                                </p:dataTable>
+
+                            </p:outputPanel>
+
+                        </p:dialog>
+
+                    </p:panelGrid>
+
+                    <p:panelGrid columns="2" layout="grid">
+                        <f:facet name="header">
+                            <h:outputText value="Stavke programa putovanja"></h:outputText>
+                        </f:facet>
+
+
+                        <p:outputLabel for="id_dana" value="Dan broj:" />
+                        <p:inputText id="id_dana" value="#{izmenaProgramaPutovanjaMB.izabranaStavka.iddana}" style="width:80%"/> 
+
+                        <p:outputLabel for="datum" value="Datum:" />
+                        <p:inputText id="datum" value="#{izmenaProgramaPutovanjaMB.izabranaStavka.datum}" style="width:80%">
+                            <f:convertDateTime pattern="dd.MM.yyyy" />
+                        </p:inputText> 
+
+                        <p:outputLabel for="mesto">Mesto obilaska:</p:outputLabel>
+                        <p:selectOneMenu id="mesto" value="#{izmenaProgramaPutovanjaMB.izabranaStavka.idmesta}" style="width:80%">
+                            <f:selectItems value="#{izmenaProgramaPutovanjaMB.mestaObilaskaMapa}"></f:selectItems>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="opis_dana" value="Opis dana:" />
+                        <p:inputTextarea id="opis_dana" value="#{izmenaProgramaPutovanjaMB.izabranaStavka.opisdana}" style="width:80%"/> 
+
+
+                        <f:facet name="footer">
+                            <div align="left">
+                                <p:commandButton id="unos_stavke_btn" update=":izmena_programa_form:panel_stavke" value="Unesi stavku" action="#{izmenaProgramaPutovanjaMB.dodajStavku()}"/>
+
+                            </div>
+
+                        </f:facet>
+                    </p:panelGrid>
+
+
+
+                    <p:panel id="panel_stavke">
+                        <p:dataTable id="table_stavke" value="#{izmenaProgramaPutovanjaMB.stavke}" var="s" selectionMode="single" selection="#{izmenaProgramaPutovanjaMB.stavka1}" rowKey="#{s.iddana}" editable = "true">
+
+                            <p:ajax event="rowEdit" listener="#{izmenaProgramaPutovanjaMB.izmeniStavku}" update=":izmena_programa_form:table_stavke" />
+                            <p:ajax event="rowEditCancel" listener="#{izmenaProgramaPutovanjaMB.ponistiIzmenuStavke}" update=":izmena_programa_form:table_stavke" />
+
+                            <p:column headerText="ID dana" sortBy="#{s.iddana}" >
+                                <h:outputText value="#{s.iddana}" />
+                            </p:column>
+
+                            <p:column headerText="Datum">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{s.datum}" >
+                                        <f:convertDateTime pattern="dd.MM.yyyy" /></h:outputText>
+                                    </f:facet>
+                                    <f:facet name="input"><h:inputText value="#{s.datum}" >
+                                        <f:convertDateTime pattern="dd.MM.yyyy" /></h:inputText>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                         
+                            <p:column headerText="Mesto obilaska">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{s.idmesta}" /></f:facet>
+                                    <f:facet name="input"><h:inputText value="#{s.idmesta}" /></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Opis dana">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{s.opisdana}" /></f:facet>
+                                    <f:facet name="input"><h:inputText value="#{s.opisdana}" /></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Izmena" style="width:60px">
+                                <p:rowEditor></p:rowEditor>
+                            </p:column>
+
+                        </p:dataTable>
+                        <p:commandButton id="brisanje_stavke_btn" update=":izmena_programa_form:panel_stavke" value="Obrisi stavku" action="#{izmenaProgramaPutovanjaMB.obrisiStavku()}"/>
+
+                        
+                    </p:panel>
+                    <p:panelGrid columns="2" layout="grid">
+                        <f:facet name="header">
+                            <h:outputText value="Podaci o ceni aranžmana"></h:outputText>
+                        </f:facet>
+                        
+                        <p:outputLabel for="ukljuceno" value="Ukljuceno u cenu:" />
+                        <p:inputTextarea id="ukljuceno" value="#{izmenaProgramaPutovanjaMB.ukljucenoucenu}" style="width:80%"/> 
+
+                        <p:outputLabel for="nijeUkljuceno" value="Nije ukljuceno u cenu:" />
+                        <p:inputTextarea id="nijeUkljuceno" value="#{izmenaProgramaPutovanjaMB.nijeukljucenoucenu}" style="width:80%"/> 
+
+                        <p:outputLabel for="iznos" value="Iznos:" />
+                        <p:inputText id="iznos" value="#{izmenaProgramaPutovanjaMB.iznos}" style="width:80%"/> 
+                        
+                        <p:outputLabel for="status">Status</p:outputLabel>
+                        <p:selectOneRadio id="status" value="#{izmenaProgramaPutovanjaMB.status}">
+                            <f:selectItem itemLabel="Promenjen" itemValue="promenjen"></f:selectItem>
+                            <f:selectItem itemLabel="Poslat" itemValue="poslat"></f:selectItem>
+                        </p:selectOneRadio>
+                        </p:panelGrid>
+                    <h:commandButton id="unesi_zahtev_korisnika" value="Izmeni program" action="#{izmenaProgramaPutovanjaMB.izmeniProgram()}" style="margin-top: 30px;"  />
+                </p:panel>
+            </h:form>
+
+
+        </ui:define>  
+    </ui:composition>
+</html>
+
